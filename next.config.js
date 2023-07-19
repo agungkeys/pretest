@@ -5,12 +5,18 @@ const nextConfig = {
     remotePatterns: [     
       {
         protocol: 'https',
+        hostname: 'cdn2.thecatapi.com',
+        port: '',
+        pathname: '/images/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'placehold.co',
         port: '',
         pathname: '/**',
       },
     ],
-		domains: ['https://placehold.co'],
+		domains: ['cdn2.thecatapi.com', 'https://placehold.co'],
 	},
   env: {
     API_HOST: process.env.API_HOST,

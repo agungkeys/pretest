@@ -10,7 +10,7 @@ export default function Header() {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if(!!mobileMenuIsOpen) {
+    if(!!mobileMenuIsOpen && themeMode) {
       setMobileMenuIsOpen(!mobileMenuIsOpen)
     }
 
