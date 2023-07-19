@@ -24,6 +24,7 @@ const InfiniteScrollComponent: React.FC = () => {
 
   const [isFetching, setIsFetching] = useState(false);
   const [items, setItems] = useState<TBreed[]>();
+  const [displayItems, setDisplayItems] = useState<TBreed[]>();
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const perPage = 10;
@@ -55,6 +56,7 @@ const InfiniteScrollComponent: React.FC = () => {
   useEffect(() => {
     if (data.length > 0) {
       setItems(data);
+      setDisplayItems(data);
     } else {
       setHasMore(false);
     }
@@ -83,16 +85,35 @@ const InfiniteScrollComponent: React.FC = () => {
     setIsFetching(false);
   }, [isFetching]);
 
-  function handleSearch(value: String) {
-    console.log("🚀 ~ file: index.tsx:87 ~ handleSearch ~ value:", value)
+  function searchName(items:TBreed[], query:String) {
+    const filteredNames = items.filter((item) => {
+      const lowerCaseName = item?.name?.toLowerCase();
+      const lowerCaseQuery = query.toLowerCase();
+      return lowerCaseName?.includes(lowerCaseQuery);
+    });
+  
+    return filteredNames;
+  }
+  
 
+  function handleSearch(value: String) {
+    const filtered = searchName(items || [], value);
+    setDisplayItems(filtered);
+  }
+
+  function handleClear() {
+    setDisplayItems(items)
+    router.push('/');
   }
 
   return (
     <div>
-      <Search handleChange={(val:String) =>  handleSearch(val)} />  
+      <Search 
+        handleChange={(val:String) =>  handleSearch(val)} 
+        handleClear={handleClear}
+      />  
       <ul>
-        {items?.map((item: TBreed, index: number) => (
+        {displayItems?.map((item: TBreed, index: number) => (
           <div key={`${index}`} tabIndex={index} className="collapse collapse-arrow border border-gray-300 rounded-md my-4" onClick={() => fetchDataImages(item.id)}> 
             <div className="collapse-title text-xl font-medium">
             <span className="dark:text-gray-200 text-lg">{item.name}</span>
